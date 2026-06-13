@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expenses &amp; Budget Visualizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <span class="brand-mark">＄</span>
+          <h1>Expenses & Budget Visualizer</h1>
+        </div>
+
+        <div class="header-right">
+          <div class="balance-card">
+            <span class="balance-label">Total Spent</span>
+            <span class="balance-amount" id="totalBalance">$0.00</span>
+          </div>
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+              <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+      </div>
+    </header>
+
+
+    <section class="greeting-bar">
+      <div class="greeting-bar-inner">
+        <div class="greeting-info">
+          <p class="date-text" id="dateText">Loading date...</p>
+          <h2 class="greeting-text" id="greetingText">Hello<span id="greetingName"></span></h2>
+          <p class="time-text" id="timeText">00:00:00</p>
+        </div>
+
+        <div class="name-field">
+          <label for="userNameInput">Your name</label>
+          <input type="text" id="userNameInput" placeholder="e.g. Carlos Saint" maxlength="24" autocomplete="off" />
+        </div>
+      </div>
+    </section>
+
+    <main>
+
+      <section class="left-panel">
+        <div class="card">
+          <h2>Add Transaction</h2>
+          <form id="transactionForm" novalidate>
+
+            <div class="form-group">
+              <label for="itemName">Item Name</label>
+              <input type="text" id="itemName" placeholder="e.g. Grocery run" maxlength="60" autocomplete="off" />
+              <span class="error-msg" id="nameError">Please enter an item name.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="amount">Amount ($)</label>
+              <input type="number" id="amount" placeholder="0.00" min="0.01" step="0.01" />
+              <span class="error-msg" id="amountError">Please enter a valid amount greater than 0.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category">
+                <option value="">Select category</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Transport">Education</option>
+                <option value="Transport">Fashion</option>
+                <option value="Fun">Fun</option>
+              </select>
+              <span class="error-msg" id="categoryError">Please select a category.</span>
+            </div>
+
+            <button type="submit" class="btn-primary">Add Transaction</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>
+            Transactions
+            <span class="count-badge" id="countBadge">0</span>
+          </h2>
+          <div id="transactionList" class="transaction-list">
+            <p class="empty-state" id="emptyState">No transactions yet. Add one above!</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="right-panel">
+        <div class="card chart-card">
+          <h2>Spending by Category</h2>
+          <div class="chart-wrapper">
+            <canvas id="spendingChart"></canvas>
+            <p class="empty-state chart-empty" id="chartEmpty">Add transactions to see the chart.</p>
+          </div>
+          <div class="category-summary" id="categorySummary"></div>
+        </div>
+      </section>
+
+    </main>
+
+      <section class="productivity-section">
+        <div class="productivity-grid">
+
+          <div class="card timer-card">
+            <h2>Focus Timer</h2>
+            <div class="timer-ring-wrapper">
+              <svg class="timer-ring" viewBox="0 0 200 200">
+                <circle class="ring-track" cx="100" cy="100" r="90"></circle>
+                <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="90"></circle>
+              </svg>
+              <div class="timer-display" id="timerDisplay">25:00</div>
+            </div>
+
+            <div class="timer-controls">
+              <button type="button" id="startBtn" class="btn-primary btn-small">Start</button>
+              <button type="button" id="stopBtn" class="btn-secondary btn-small">Stop</button>
+              <button type="button" id="resetBtn" class="btn-secondary btn-small">Reset</button>
+            </div>
+
+            <div class="timer-settings">
+              <label for="timerMinutes">Session length (minutes)</label>
+              <input type="number" id="timerMinutes" min="1" max="120" value="25" />
+            </div>
+          </div>
+
+
+          <div class="card todo-card">
+            <h2>To-Do List</h2>
+
+            <form id="todoForm" class="inline-form" novalidate>
+              <input type="text" id="todoInput" placeholder="Add a task..." maxlength="100" autocomplete="off" />
+              <button type="submit" class="btn-primary btn-small">Add</button>
+            </form>
+
+            <ul class="todo-list" id="todoList">
+              <li class="empty-state" id="todoEmpty">No tasks yet. Add one above!</li>
+            </ul>
+          </div>
+
+          <div class="card links-card">
+            <h2>Quick Links</h2>
+
+            <form id="linkForm" class="link-form" novalidate>
+              <input type="text" id="linkName" placeholder="Name (e.g. Gmail)" maxlength="20" autocomplete="off" />
+              <input type="url" id="linkUrl" placeholder="https://..." autocomplete="off" />
+              <button type="submit" class="btn-primary btn-small">Add Link</button>
+            </form>
+
+            <div class="link-grid" id="linkGrid">
+              <p class="empty-state" id="linkEmpty">No quick links yet. Add one above!</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    <script src="js/app.js"></script>
+  </body>
+
+</html>
